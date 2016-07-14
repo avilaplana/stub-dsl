@@ -4,7 +4,7 @@ version := "1.0"
 
 organization := "dsl"
 
-scalaVersion := "2.11.0"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-json" % "2.4.6",

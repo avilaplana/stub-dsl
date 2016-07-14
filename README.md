@@ -1,4 +1,4 @@
-
+[ ![Codeship Status for avilaplana/stub-dsl](https://codeship.com/projects/83cbc8a0-c6b8-0132-d589-5a19aff8c0c6/status?branch=master)](https://codeship.com/projects/74770)
 
 Example 1
 ---------
