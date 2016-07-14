@@ -1,65 +1,293 @@
-# Exercise - Excution System
 
-Technologies:
+
+Example 1
+---------
+
 ```
-1. JDK 1.8
-2. Scala 2.10.2
-3. Sbt 0.13.8
-4. Scalatest
-5. Cucumber
-```
-
-To solve the problem I have used BDD/TDD. I consider that it is very important for a developer to write acceptance
-tests firsts because make the developer understand the business value.
-
-I like the idea of writing unit tests for small pieces of functionality that cannot be tested from a feature
-test.
-
-I like the balance between acceptance tests and unit tests but it is very important avoid the duplicity.
-
-The class **ExchangeSystem** is responsible for:
-```
-1. Provide open orders
-2. Provide executed orders
-3. Provide open interest for a given RIC and direction
-4. Provide the average execution price for a given RIC
-5. Provide executed quantity for a given RIC and user
+Resource()
+        .get
+        .url("/some/thing")
+        .status(200)
+        .responseBody("Hello world!")
+        .responseHeader("Content-Type","text/plain")
+        .jsonAsString
 ```
 
-Because this is an exercise, I have used a stateful repository **OrderRepository** that replace the idea
-of sql/nosql repository or a gateway in the case of microservice architecture.
-
-As data structure i have used **Buffer[Order]** to append/remove orders.
-
-I have followed the principles:
 ```
-1. Interface oriented programming
-2. Immutable principle (except the repository)
+{
+   "request":{
+      "method":"GET",
+      "url":"/some/thing"
+   },
+   "response":{
+      "status":200,
+      "body":"Hello world!",
+      "headers":{
+         "Content-Type":"text/plain"
+      }
+   }
+}
 ```
 
-The case class that represents the orders is
+Example 2
+---------
+
 ```
-case class Order(direction: Direction,
-                 ric: Ric,
-                 quantity: Long,
-                 price: BigDecimal,
-                 user: String,
-                 id: String = UUID.randomUUID().toString,
-                 status: Option[Status] = None
-                )
-**Feature tests** are in:
- ```
- test/resources/features
- ```
+Resource()
+        .put
+        .urlPattern("/thing/matching/[0-9]+")
+        .status(200)
+        .jsonAsString
+```
+```
+{
+   "request":{
+      "method":"PUT",
+      "urlPattern":"/thing/matching/[0-9]+"
+   },
+   "response":{
+      "status":200
+   }
+}
+```
 
-There are two feature files:
+Example 3
+---------
 
-1. matching.feature: To satisfy the matching rules
+```
+Resource()
+        .put
+        .urlPath("/query")
+        .status(200)
+```
 
-2. orders.feature: To satisfy the example provided
+```
+{
+   "request":{
+      "method":"PUT",
+      "urlPath":"/query"
+   },
+   "response":{
+      "status":200
+   }
+}
+```
 
-To run the test:
-```sbt cucumber```
+Example 4
+---------
+```
+Resource()
+        .post
+        .url("/with/headers")
+        .headerNotMatching("X-Custom1", "text1")
+        .headerContains("X-Custom2", "text2")
+        .headerEqualTo("X-Custom3", "text3")
+        .headerMatching("X-Custom4", "text4")
+        .status(200)
+        .jsonAsString
+
+```
+```
+{
+   "request":{
+      "method":"POST",
+      "url":"/with/headers",
+      "headers":{
+         "X-Custom1":{
+            "doesNotMatch":"text1"
+         },
+         "X-Custom2":{
+            "contains":"text2"
+         },
+         "X-Custom3":{
+            "equalTo":"text3"
+         },
+         "X-Custom4":{
+            "matches":"text4"
+         }
+      }
+   },
+   "response":{
+      "status":200
+   }
+}
+```
+
+Example 5
+---------
+
+```
+Resource()
+        .get
+        .urlPath("/with/query")
+        .queryParametersNotMatching("search1", "text1")
+        .queryParametersContains("search2", "text2")
+        .queryParametersEqualsTo("search3", "text3")
+        .queryParametersMatching("search4", "text4")
+        .status(200)
+        .jsonAsString
+```
+
+```
+{
+   "request":{
+      "method":"GET",
+      "urlPath":"/with/query",
+      "queryParameters":{
+         "search1":{
+            "doesNotMatch":"text1"
+         },
+         "search2":{
+            "contains":"text2"
+         },
+         "search3":{
+            "equalTo":"text3"
+         },
+         "search4":{
+            "matches":"text4"
+         }
+      }
+   },
+   "response":{
+      "status":200
+   }
+}
+```
+
+Example 6
+---------
+
+```
+Resource()
+        .get
+        .urlPath("/with/query")
+        .cookiesNotMatching("search1", "text1")
+        .cookiesContains("search2", "text2")
+        .cookiesEqualsTo("search3", "text3")
+        .cookiesMatching("search4", "text4")
+        .status(200)
+        .jsonAsString
+
+```
 
 
-# stub-dsl
+```
+{
+   "request":{
+      "method":"GET",
+      "urlPath":"/with/query",
+      "cookies":{
+         "search1":{
+            "doesNotMatch":"text1"
+         },
+         "search2":{
+            "contains":"text2"
+         },
+         "search3":{
+            "equalTo":"text3"
+         },
+         "search4":{
+            "matches":"text4"
+         }
+      }
+   },
+   "response":{
+      "status":200
+   }
+}
+```
+
+
+
+Example 7
+---------
+
+```
+Resource()
+        .get
+        .urlPath("/with/query")
+        .bodyPatternsEqualToXml("<search-results/>")
+        .bodyPatternsMatchesXPath("//search-results")
+        .status(200)
+        .jsonAsString
+
+```
+```
+{
+   "request":{
+      "method":"GET",
+      "urlPath":"/with/query",
+      "bodyPatterns":[
+         {
+            "equalToXml":"<search-results/>"
+         },
+         {
+            "matchesXPath":"//search-results"
+         }
+      ]
+   },
+   "response":{
+      "status":200
+   }
+}
+````
+
+Example 8
+---------
+```
+Resource().
+    get.
+    url("/some/thing").
+    headerEqualTo("Authorization", "Basic 01234567890").
+    headerContains("Request-Id", "09876").
+    bodyPatternsEqualToXml("<resource>aa</resource>").
+    bodyPatternsMatchesXPath("<resource>").
+    cookiesContains("Session-Id", "1234567890").
+    queryParametersContains("page", "1").
+    responseHeader("Request-Id", "09876").
+    status(200).
+    responseBody("this is an example")
+    .jsonAsString
+
+```
+```
+{
+   "request":{
+      "method":"GET",
+      "url":"/some/thing",
+      "cookies":{
+         "Session-Id":{
+            "contains":"1234567890"
+         }
+      },
+      "bodyPatterns":[
+         {
+            "equalToXml":"<resource>aa</resource>"
+         },
+         {
+            "matchesXPath":"<resource>"
+         }
+      ],
+      "queryParameters":{
+         "page":{
+            "contains":"1"
+         }
+      },
+      "headers":{
+         "Authorization":{
+            "equalTo":"Basic 01234567890"
+         },
+         "Request-Id":{
+            "contains":"09876"
+         }
+      }
+   },
+   "response":{
+      "headers":{
+         "Request-Id":"09876"
+      },
+      "status":200,
+      "body":"this is an example"
+   }
+}
+```
