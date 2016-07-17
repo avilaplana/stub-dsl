@@ -1,5 +1,39 @@
 [ ![Codeship Status for avilaplana/stub-dsl](https://codeship.com/projects/83cbc8a0-c6b8-0132-d589-5a19aff8c0c6/status?branch=master)](https://codeship.com/projects/74770)
 
+# stub-dsl
+
+The way of defining stubs on demand in a wiremock server deployed in a external environment is using a [wiremock Rest API](http://wiremock.org/docs/stubbing/) where the body of the request is the definition of the stub. 
+The purpose of this library is to provide a DSL in scala to define the body.
+
+
+## How to configure your project
+
+
+Add the following to your sbt `project/plugins.sbt` file:
+
+```scala
+addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
+```
+
+_NOTE_ this plugin targets sbt 0.13.8+
+
+You will need to add the following to your `project/build.properties` file if you have multiple versions of sbt installed
+
+    sbt.version=0.13.8
+
+Add the library dependency
+
+```scala
+libraryDependencies += "alvarovg" %% "stub-dsl_2.11" % "0.1.0"
+```
+
+_NOTE_ this libraries is tested against wiremock 2.1.7
+
+## Usage
+
+
+Here there are some examples that explains how easy is to use the DSL
+ 
 Example 1
 ---------
 

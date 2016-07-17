@@ -1,8 +1,11 @@
+import de.heikoseeberger.sbtheader.CommentStyleMapping
+import de.heikoseeberger.sbtheader.license.Apache2_0
+
 name := "stub-dsl"
 
-version := "1.0"
+version := "0.1.0"
 
-organization := "dsl"
+organization := "alvarovg"
 
 scalaVersion := "2.11.6"
 
@@ -17,4 +20,13 @@ libraryDependencies ++= Seq(
 
 enablePlugins(CucumberPlugin)
 
+enablePlugins(AutomateHeaderPlugin)
+
 CucumberPlugin.glue := "acceptance"
+
+headers := CommentStyleMapping.createFrom(Apache2_0, "2015", "Alvaro Vilaplana Garcia")
+
+licenses += ("Apache-2.0", url("http://opensource.org/licenses/Apache-2.0"))
+
+bintrayPackageLabels := Seq("wiremock", "stub", "dsl")
+
